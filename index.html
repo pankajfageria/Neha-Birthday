@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,7 +63,7 @@ p {
     margin-top: 15px;
 }
 
-/* Slideshow */
+/* PHOTO SLIDESHOW */
 
 .slideshow {
     margin: 20px auto;
@@ -78,6 +79,7 @@ p {
 }
 
 .slide img {
+    display: block;
     width: 100%;
     height: 330px;
     object-fit: contain;
@@ -114,7 +116,6 @@ button {
 }
 
 button:hover {
-    transform: scale(1.05);
     background: #ff0062;
 }
 
@@ -165,7 +166,55 @@ button:hover {
     animation: glow 2s infinite alternate;
 }
 
-/* Balloons */
+/* DATE QUESTION */
+
+.date-question {
+    margin-top: 25px;
+    padding: 20px 10px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.2);
+}
+
+.date-question h2 {
+    font-size: 1.4rem;
+}
+
+.date-buttons {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    min-height: 110px;
+    margin-top: 10px;
+}
+
+.yes-btn {
+    background: #ff1493;
+    position: relative;
+    z-index: 2;
+}
+
+.yes-btn:hover {
+    background: #e60073;
+    transform: scale(1.08);
+}
+
+.no-btn {
+    background: #777;
+    z-index: 4;
+    white-space: nowrap;
+}
+
+#yesMessage {
+    display: none;
+    margin-top: 20px;
+    font-size: 1.35rem;
+    line-height: 1.6;
+    animation: pop .6s ease;
+}
+
+/* BALLOONS */
 
 .balloon {
     position: fixed;
@@ -222,6 +271,7 @@ button:hover {
     h1 { font-size: 1.7rem; }
     .name { font-size: 2.1rem; }
     .slide img { height: 280px; }
+    .date-question { padding: 18px 8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -251,7 +301,8 @@ button:hover {
         A special collection of memories for a very special person! 💖
     </p>
 
-    <!-- Seven-picture slideshow -->
+    <!-- SEVEN-PICTURE SLIDESHOW -->
+
     <div class="slideshow">
 
         <div class="slide active">
@@ -301,6 +352,7 @@ button:hover {
             <button class="dot" onclick="showSlide(5)" aria-label="Photo 6"></button>
             <button class="dot" onclick="showSlide(6)" aria-label="Photo 7"></button>
         </div>
+
     </div>
 
     <p>
@@ -313,7 +365,10 @@ button:hover {
         🎊 Celebrate!
     </button>
 
+    <!-- BIRTHDAY WISHES AND DATE QUESTION -->
+
     <div class="wish" id="wish">
+
         <h2>🎂 Happy Birthday Neha! 🎂</h2>
 
         <p>💖 Happy Birthday to someone truly special!</p>
@@ -326,13 +381,35 @@ button:hover {
         </p>
 
         <p>
-            🌸 Keep smiling, keep shining, and never stop chasing your dreams.
-            You deserve all the happiness in the world.
+            🌸 May you get a government job this...keep working hard
         </p>
 
-        <p>
-            🎁 May you get a government job this year keep working hard 🎈✨💖
-        </p>
+        <div class="date-question" id="dateQuestion">
+
+            <h2>💖 One Last Question 💖</h2>
+
+            <p>Neha, will you date me? 🥹🌹</p>
+
+            <div class="date-buttons" id="dateButtons">
+
+                <button class="yes-btn" onclick="sayYes()">
+                    Yes ❤️
+                </button>
+
+                <button class="no-btn" id="noBtn"
+                    onmouseenter="moveNoButton()"
+                    onclick="moveNoButton()">
+                    No 🙈
+                </button>
+
+            </div>
+
+            <h2 id="yesMessage">
+                Yaaay! 🥹❤️ You made me the happiest person! 💖🌹
+            </h2>
+
+        </div>
+
     </div>
 
     <div class="made-by">
@@ -344,7 +421,9 @@ button:hover {
 <audio id="birthdayMusic" src="birthday.mp3" loop></audio>
 
 <script>
-// Slideshow
+
+// PHOTO SLIDESHOW
+
 let currentSlide = 0;
 let isPlaying = true;
 let slideshowTimer;
@@ -405,9 +484,12 @@ dots.forEach((dot, index) => {
 
 startSlideshow();
 
-// Confetti
+
+// CONFETTI ANIMATION
+
 const canvas = document.getElementById("confetti");
 const ctx = canvas.getContext("2d");
+
 let pieces = [];
 
 function resize() {
@@ -464,12 +546,14 @@ function animate() {
 
 animate();
 
-// Birthday surprise
+
+// CELEBRATE BUTTON
+
 function celebrate() {
     const music = document.getElementById("birthdayMusic");
 
     music.play().catch(error => {
-        console.log("Music playback was blocked by the browser.", error);
+        console.log("Music playback could not start:", error);
     });
 
     createConfetti(250);
@@ -485,6 +569,35 @@ function celebrate() {
         block: "center"
     });
 }
+
+
+// MOVING NO BUTTON
+
+function moveNoButton() {
+    const btn = document.getElementById("noBtn");
+    const area = document.getElementById("dateButtons");
+
+    const maxX = Math.max(0, area.clientWidth - btn.offsetWidth);
+    const maxY = Math.max(0, area.clientHeight - btn.offsetHeight);
+
+    btn.style.position = "absolute";
+    btn.style.left = Math.random() * maxX + "px";
+    btn.style.top = Math.random() * maxY + "px";
+}
+
+
+// YES BUTTON
+
+function sayYes() {
+    document.getElementById("yesMessage").style.display = "block";
+    document.getElementById("noBtn").style.display = "none";
+
+    document.querySelector(".yes-btn").textContent =
+        "❤️ She said YES! ❤️";
+
+    createConfetti(200);
+}
+
 </script>
 
 </body>
